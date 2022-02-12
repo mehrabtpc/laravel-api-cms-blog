@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Admin\Database\Seeders\CreateSuperAdminTableSeeder;
+use Modules\Admin\Database\Seeders\PermissionsTableSeeder;
+use Modules\Admin\Database\Seeders\RoleTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,6 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call(CreateSuperAdminTableSeeder::class);
+        $this->call(PermissionsTableSeeder::class);
+        $this->call(RoleTableSeeder::class);
     }
 }

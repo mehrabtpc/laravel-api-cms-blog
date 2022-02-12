@@ -15,8 +15,16 @@ Use \Modules\Blog\Http\Controllers\CategoryController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group(['middleware' => ['auth:admin-api']], function () {
-    route::apiResource('category', 'CategoryController');
-    route::apiResource('comment', 'CommentController');
+
+Route::group(['middleware' => ['auth:admin-api','role:super-admin|can:manage posts']], function () {
     route::apiResource('post', 'PostController');
 });
+
+Route::group(['middleware' => ['auth:admin-api','role:super-admin|can:manage categories']], function () {
+    route::apiResource('category', 'CategoryController');
+});
+
+Route::group(['middleware' => ['auth:admin-api']], function () {
+    route::apiResource('comment', 'CommentController');
+});
+

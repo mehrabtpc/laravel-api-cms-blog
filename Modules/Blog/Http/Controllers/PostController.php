@@ -16,6 +16,7 @@ class PostController extends Controller
     public function index()
     {
         $posts=Post::query()->get();
+
         return response()->json([
             'status' => 'success',
             'posts' => $posts,
@@ -43,7 +44,6 @@ class PostController extends Controller
         //add tags
         $tags =$request->tags;
         foreach ($tags as $tag){
-            $tag=Tag::findOrCreate($tag);
             $post->attachTags([$tag]);
         }
 
@@ -85,10 +85,10 @@ class PostController extends Controller
         }
 
         //update tags
-//        $tags = explode(",", $request->tags);
-        $tags=$request->tags;
-
-        $post->syncTags([$tags]);
+        $tags =$request->tags;
+        foreach ($tags as $tag){
+            $post->syncTags([$tags]);
+        }
 
         //return data
         return response()->json([

@@ -6,16 +6,12 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Admin\Entities\Role;
+use Spatie\Permission\Models\Permission;
 use Modules\Admin\Http\Requests\Role\StoreRoleRequest;
 use Modules\Admin\Http\Requests\Role\UpdateRoleRequest;
-use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
-//roles ->created here
-//permissions ->static
-//role has permissions ->must create here
-
     public function index()
     {
         $roles=Role::query()->get();
@@ -37,9 +33,9 @@ class RoleController extends Controller
         $permissions = $request->permissions;
 
         foreach ($permissions as $permission){
-            //give permission to role
             $role->givePermissionTo($permission);
         }
+
 
         return response()->json([
             'status' => 'success',

@@ -38,8 +38,7 @@ class AdminController extends Controller
             'email' => $request->email,
             'password' =>bcrypt($request->password),
         ]);
-
-        $role = Role::query()->where('name','user')->get();
+        $role=$request->role;
         $admin->assignRole($role);
 
         $token = $admin->createToken('token')->plainTextToken;
