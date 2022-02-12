@@ -2,9 +2,9 @@
 
 namespace Modules\Admin\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Modules\Admin\Entities\Admin;
 use Modules\Admin\Entities\Role;
 use Modules\Admin\Http\Requests\Admin\StoreAdminRequest;
@@ -15,17 +15,21 @@ class AdminController extends Controller
     public function index(){
         $admins= Admin::all();
 
-        return response()->success('', compact('admins'));
-
+        return response()->json([
+            'status' => 'success',
+            'admins' => $admins,
+        ]);
     }
 
     public function show(Admin $admin){
 
-        return response()->success('', compact('admin'));
-
+        return response()->json([
+            'status' => 'success',
+            'admin' => $admin,
+        ]);
     }
 
-    public function register(StoreAdminRequest $request)
+    public function storeUser(StoreAdminRequest $request)
     {
         $admin =Admin::create([
             'name' => $request->name,
@@ -38,32 +42,13 @@ class AdminController extends Controller
         $role = Role::query()->where('name','user')->get();
         $admin->assignRole($role);
 
-        $token = $admin->createToken('myapptoken')->plainTextToken;
+        $token = $admin->createToken('token')->plainTextToken;
 
-        return response()
-            ->success('success',
-            compact('admin','token'),
-            201);
-    }
-
-    public function registerUser($request){
-        $admin =Admin::query()->create([
-            'name' => $request->name,
-            'username' => $request->username,
-            'mobile' => $request->mobile,
-            'email' => $request->email,
-            'password' =>bcrypt($request->password),
-        ]);
-
-        $role = Role::query()->where('name','admin')->get();
-        $admin->assignRole($role);
-
-        $token = $admin->createToken('myapptoken')->plainTextToken;
-
-        return response()
-            ->success('حساب با موفقیت ساخته شد',
-            compact('admin','token')
-            ,201);
+        return response()->json([
+            'status' => 'success',
+            'admin' => $admin,
+            'token' => $token,
+        ],201);
     }
 
     public function update(UpdateAdminRequest $request,Admin $admin){
@@ -79,13 +64,15 @@ class AdminController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'حساب با موفقیت ویرایش شد',
-        ]);
+        ],201);
     }
 
     public function delete(Admin $admin){
-
         $admin->delete();
-        return response()->success('Deleted SuccessFully', '');
 
+        return response()->json([
+            'status' => 'success',
+            'message' => 'حساب با موفقیت حذف شد',
+        ],201);
     }
 }

@@ -11,7 +11,6 @@ class UpdateCommentRequest extends FormRequest
     {
         return [
             'body' => 'required|min:5',
-            'user_id' => 'required',
             'post_id' => 'required',
         ];
     }
@@ -25,7 +24,6 @@ class UpdateCommentRequest extends FormRequest
         return[
             'body.required' => 'لطفا نظر خود را وارد کنید',
             'body.min' => 'نظر شما باید حداقل 5 کاراکتر باشد',
-            'user_id.required' => 'برای درج نظر، باید ابتدا وارد شوید',
             'post_id.required' => 'لطفا پست خود را انتخاب کنید',
         ];
     }

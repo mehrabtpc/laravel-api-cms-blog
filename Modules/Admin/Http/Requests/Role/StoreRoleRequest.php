@@ -1,11 +1,16 @@
 <?php
 
-namespace Modules\Admin\Http\Requests;
+namespace Modules\Admin\Http\Requests\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRoleRequest extends FormRequest
 {
+    /**
+     * @var mixed
+     */
+    private $permissions;
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -15,7 +20,6 @@ class StoreRoleRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'guard_name' => 'required'
         ];
     }
 
@@ -33,7 +37,6 @@ class StoreRoleRequest extends FormRequest
     {
         return [
             'name.required' => 'لطفا نام خود را وارد کنید',
-            'guard_name.required' => 'لطفا نام گارد خود را وارد کنید'
         ];
     }
 }

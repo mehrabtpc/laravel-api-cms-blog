@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Admin\Http\Requests;
+namespace Modules\Admin\Http\Requests\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -15,7 +15,6 @@ class UpdateRoleRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'guard_name' => 'required'
         ];
     }
 
@@ -33,7 +32,6 @@ class UpdateRoleRequest extends FormRequest
     {
         return [
             'name.required' => 'لطفا نام خود را وارد کنید',
-            'guard_name.required' => 'لطفا نام گارد خود را وارد کنید'
         ];
     }
 }

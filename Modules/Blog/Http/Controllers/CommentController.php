@@ -15,40 +15,56 @@ class CommentController extends Controller
     public function index()
     {
         $comment=Comment::query()->get();
-        return response()->success('', compact('comment'));
+
+        return response()->json([
+            'status' => 'success',
+            'comment' => $comment,
+        ]);
     }
 
     public function store(StoreCommentRequest $request)
     {
         $comment=Comment::create([
             'body' => $request->body,
-            'user_id' => auth()->user->id,
+            'user_id' => auth()->user()->id,
             'post_id' =>$request->post_id,
         ]);
-        return response()->success('', compact('comment'));
 
+        return response()->json([
+            'status' => 'success',
+            'comment' => $comment,
+        ]);
     }
 
     public function show(Comment $comment)
     {
-        return response()->success('', compact('comment'));
-
+        return response()->json([
+            'status' => 'success',
+            'comment' => $comment,
+        ]);
     }
 
     public function update(UpdateCommentRequest $request, Comment $comment)
     {
         $comment->update([
            'body' => $request->body,
-           'user_id' => auth()->user->id,
+           'user_id' => auth()->user()->id,
            'post_id' =>$request->post_id,
         ]);
-        return response()->success('', compact('comment'));
+
+        return response()->json([
+            'status' => 'success',
+            'comment' => $comment,
+        ]);
     }
 
     public function destroy(Comment $comment)
     {
-        $comment->destroy();
-        return response()->success('', compact('comment'));
+        $comment->delete();
 
+        return response()->json([
+            'status' => 'success',
+            'comment' => $comment,
+        ]);
     }
 }

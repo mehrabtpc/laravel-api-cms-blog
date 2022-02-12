@@ -2,31 +2,34 @@
 
 namespace Modules\Blog\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Modules\Blog\Entities\Post;
 use Modules\Blog\Http\Requests\Post\StorePostRequest;
 use Modules\Blog\Http\Requests\Post\UpdatePostRequest;
+use Spatie\Tags\Tag;
 
 class PostController extends Controller
 {
-
     public function index()
     {
-        $post=Post::query()->get();
-        return response()->success('', compact('post'));
+        $posts=Post::query()->get();
+        return response()->json([
+            'status' => 'success',
+            'posts' => $posts,
+        ]);
     }
 
     public function store(StorePostRequest $request)
     {
-        //store post
-        $post=Post::query()->create([
+        $post=Post::create([
             'title' => $request->title,
             'description' => $request->description,
             'content' => $request->content,
             'published_at' => $request->published_at,
-            'user_id' => auth()->user->id,
+            'user_id' => auth()->user()->id
             //image->spatie media
             //category ->many to many relationship
             //tag ->spatie tag
@@ -36,17 +39,29 @@ class PostController extends Controller
         if($request->hasFile('image') && $request->file('image')->isValid()){
             $post->addMediaFromRequest('image')->toMediaCollection('files');
         }
+
         //add tags
-        $tags = explode(",", $request->tags);
-        $post->attachTags([$tags]);
+        $tags =$request->tags;
+        foreach ($tags as $tag){
+            $tag=Tag::findOrCreate($tag);
+            $post->attachTags([$tag]);
+        }
 
         //return data
-        return response()->success('', compact('post'));
+        return response()->json([
+            'status' => 'success',
+            'post' => $post,
+            'tags' => $tags
+        ]);
     }
 
     public function show(Post $post)
     {
-        return response()->success('', compact('post'));
+        //return data
+        return response()->json([
+            'status' => 'success',
+            'post' => $post,
+        ]);
     }
 
     public function update(UpdatePostRequest $request, Post $post)
@@ -57,7 +72,7 @@ class PostController extends Controller
             'description' => $request->description,
             'content' => $request->content,
             'published_at' => $request->published_at,
-            'user_id' => auth()->user->id,
+            'user_id' => auth()->user()->id,
             //image->spatie media
             //category ->many to many relationship
             //tag ->spatie tag
@@ -70,21 +85,32 @@ class PostController extends Controller
         }
 
         //update tags
-        $tags = explode(",", $request->tags);
+//        $tags = explode(",", $request->tags);
+        $tags=$request->tags;
+
         $post->syncTags([$tags]);
 
-        //return date
-        return response()->success('', compact('post'));
+        //return data
+        return response()->json([
+            'status' => 'success',
+            'post' => $post,
+        ]);
     }
 
     public function destroy(Post $post)
     {
-        $post->destroy();
+        //delete post
+        $post->delete();
+
         //delete image
         if($post->hasFile('image') && $post->file('image')->isValid()) {
             $post->media()->delete();
         }
 
-        return response()->success('', compact('post'));
+        //return data
+        return response()->json([
+            'status' => 'success',
+            'post' => $post,
+        ]);
     }
 }

@@ -24,7 +24,6 @@ class StoreCategoryRequest extends FormRequest
         return [
             'name.required' => 'نام دسته بندی اجباری است!',
             'name.min' => 'نام دسته بندی باید حداقل 3 کاراکتر باشد',
-            'description.required' => 'لطفا توضیحات را وارد کنید!',
             'description.min' => 'توضیحات دسته بندی باید حداقل 3 کاراکتر باشد',
             'image.required' => 'عکس اجباری است',
         ];

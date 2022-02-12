@@ -40,9 +40,9 @@ class StorePostRequest extends FormRequest
             'description.required' => 'لطفا توضیحات خود را وارد کنید',
             'description.min' => 'توضیحات شما باید حداقل 3 کاراکتر باشد',
             'content.required' => 'لطفا محتوای خود را وارد کنید',
-            'content.min' => 'متن شما باید حداقل 10 کاراکتر باشد',
-            'published_at.required' => 'لطفا عنوان خود را وارد کنید',
-            'user_id.required' => 'لطفا عنوان خود را وارد کنید',
+            'content.min' => 'متن محتوای شما باید حداقل 10 کاراکتر باشد',
+            'published_at.required' => 'لطفا تاریخ انتشار خود را وارد کنید',
+            'user_id.required' => 'برای انتشار پست،لطفا ابتدا لاگین کنید!',
         ];
     }
 }

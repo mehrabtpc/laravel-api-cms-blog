@@ -2,9 +2,12 @@
 
 namespace Modules\Auth\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Hash;
+use Modules\Admin\Entities\Admin;
+use Modules\Admin\Entities\Role;
+use Modules\Admin\Http\Requests\Admin\StoreAdminRequest;
 use Modules\Auth\Http\Requests\LoginRequest;
 
 class AuthController extends Controller
@@ -13,32 +16,62 @@ class AuthController extends Controller
     {
         // Check email
         $admin = Admin::where('email', $request->email)->first();
-
         if (!$admin || !Hash::check($request->password, $admin->password)) {
+
             return response()->json([
-                'statue' => 'warning',
+                'status' => 'warning',
                 'message' => 'یوزرنیم یا پسورد اشتباه است',
-            ],422);
+            ], 422);
         }
 
-        $token = $admin->createToken('myapptoken')->plainTextToken;
-
-        return response()
-            ->success('با موفقیت وارد شدید',
-                compact('admin','token')
-            ,201);
+        $token = $admin->createToken('token')->plainTextToken;
+        return response()->json([
+            'status' => 'success',
+            'message' => 'با موفقیت وارد شدید',
+            'admin' => $admin,
+            'token' => $token,
+        ],201);
     }
 
     public function logout(Request $request)
     {
         auth()->user()->tokens()->delete();
-        return response()->success('با موفقیت خارج شدید',''
-            ,401);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'با موفقیت خارج شدید',
+        ]);
+    }
+
+    public function register(StoreAdminRequest $request){
+        $admin =Admin::query()->create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'mobile' => $request->mobile,
+            'email' => $request->email,
+            'password' =>bcrypt($request->password),
+        ]);
+
+        $role = Role::query()->where('name','admin')->get();
+        $admin->assignRole($role);
+
+        $token = $admin->createToken('myapptoken')->plainTextToken;
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'یوزر با موفقیت ساخته شد',
+            'admin' => $admin,
+            'token' => $token,
+        ],201);
     }
 
     public function showProfile(){
+
         $admin = auth()->user();
-        return response()->success('',compact($admin));
+        return response()->json([
+            'status' => 'success',
+            'admin' => $admin,
+        ]);
     }
 
     public function editProfile(Request $request)
@@ -64,7 +97,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'حساب با موفقیت حدف شد',
+            'message' => 'حساب با موفقیت حذف شد',
         ]);
     }
 }

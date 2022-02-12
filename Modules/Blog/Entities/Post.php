@@ -7,12 +7,12 @@ use Modules\Admin\Entities\Admin;
 use phpDocumentor\Reflection\DocBlock\Tag;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-
 use Spatie\Tags\HasTags;
+
 
 class Post extends Model implements HasMedia
 {
-    use HasTags, InteractsWithMedia;
+    use HasTags, InteractsWithMedia,HasTags;
 
     protected $fillable = [
         'title', 'description', 'content',

@@ -6,22 +6,23 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Admin\Entities\Role;
-use Modules\Admin\Http\Requests\StoreRoleRequest;
-use Modules\Admin\Http\Requests\UpdateRoleRequest;
+use Modules\Admin\Http\Requests\Role\StoreRoleRequest;
+use Modules\Admin\Http\Requests\Role\UpdateRoleRequest;
+use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
-//roles
-//permissions
-//role has permissions
+//roles ->created here
+//permissions ->static
+//role has permissions ->must create here
 
     public function index()
     {
         $roles=Role::query()->get();
 
-
         return response()->json([
-            compact('roles')
+            'roles' => $roles,
+            'status' => 'success',
         ]);
     }
 
@@ -29,34 +30,51 @@ class RoleController extends Controller
     {
         $role=Role::create([
            'name' => $request->name,
-            'guard_name'=> 'admin_api'
+            'guard_name'=> 'admin-api'
         ]);
-        //if(has permision){
-        // //}
-    }
 
-    public function show(Role $roles)
-    {
-//        $roles=Role::find($id);
+        //permissions for this role
+        $permissions = $request->permissions;
+
+        foreach ($permissions as $permission){
+            //give permission to role
+            $role->givePermissionTo($permission);
+        }
 
         return response()->json([
-            compact('roles')
+            'status' => 'success',
+            'message' => 'رول با موفقیت ساخته شد',
         ]);
     }
 
-    public function update(UpdateRoleRequest $request, $id)
+    public function show(Role $role)
     {
-        $role=Role::find($id);
+        return response()->json([
+            'status' => 'success',
+            'role' => $role,
+        ]);
 
+    }
+
+    public function update(UpdateRoleRequest $request, Role $role)
+    {
         $role->update([
             'name' => $request->name,
         ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'رول با موفقیت ویرایش شد',
+        ]);
     }
 
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        $role=Role::find($id);
-
         $role->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'حساب با موفقیت حذف شد',
+        ]);
     }
 }

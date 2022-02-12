@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use Modules\Admin\Http\Controllers\UserController;
+use Modules\Auth\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +21,5 @@ Route::group(['middleware' => ['auth:admin-api']], function () {
     Route::post('/user/edit/', [AuthController::class,'editProfile']);
     Route::get('/user/delete-account', [AuthController::class,'deleteProfile']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/register', [AuthController::class, 'register']);
 });

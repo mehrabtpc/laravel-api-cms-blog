@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
+use Illuminate\Support\Facades\Auth;
 use Modules\Blog\Entities\Category;
 use Modules\Blog\Entities\Comment;
 use Modules\Blog\Http\Requests\Category\StoreCategoryRequest;
@@ -17,8 +18,10 @@ class CategoryController extends Controller
     {
         $category=Category::query()->get();
 
-        return response()->success('', compact('category'));
-
+        return response()->json([
+            'status' => 'success',
+            'category' => $category,
+        ]);
     }
 
     public function store(StoreCategoryRequest $request)
@@ -28,13 +31,19 @@ class CategoryController extends Controller
             'description' => $request->description,
         ]);
 
-        return response()->success('', compact('category'));
-
+        return response()->json([
+            'status' => 'success',
+            'message' => 'دسته بندی با موفقیت ساخته شد',
+            'category' => $category,
+        ]);
     }
 
     public function show(Category $category)
     {
-        return response()->success('', compact('category'));
+        return response()->json([
+            'status' => 'success',
+            'category' => $category,
+        ]);
     }
 
     public function update(UpdateCategoryRequest $request, Category $category)
@@ -44,14 +53,21 @@ class CategoryController extends Controller
             'description' => $request->description,
         ]);
 
-        return response()->success('', compact('category'));
-
+        return response()->json([
+            'status' => 'success',
+            'message' => 'دسته بندی با موفقیت حذف شد',
+            'category' => $category,
+        ]);
     }
 
     public function destroy(Category $category)
     {
-        $category->destroy;
-        return response()->success('', compact('category'));
+        $category->delete();
 
+        return response()->json([
+            'status' => 'success',
+            'message' => 'دسته بندی با موفقیت حذف شد!',
+            'category' => $category,
+        ]);
     }
 }

@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
 use Modules\Admin\Http\Controllers\AdminController;
+use Modules\Admin\Http\Controllers\UserController;
+use Laravel\Sanctum\HasApiTokens;
+
     /*
     |--------------------------------------------------------------------------
     | API Routes
@@ -14,12 +16,11 @@ use Modules\Admin\Http\Controllers\AdminController;
     |
     */
 
-
+Route::group(['middleware' => ['auth:admin-api']], function () {
     Route::get('/admin/', [AdminController::class,'index']);
     Route::get('/admin/{admin}/', [AdminController::class,'show']);
     Route::put('/admin/{admin}/edit', [AdminController::class,'update']);
     Route::delete('/admin/{admin}/destroy', [AdminController::class,'delete']);
-
-
-    Route::post('/register', [AdminController::class, 'register']);
-
+    Route::post('/storeUser', [AdminController::class, 'storeUser']);
+    Route::apiResource('role','RoleController');
+});
