@@ -31,6 +31,9 @@ class CategoryController extends Controller
             'description' => $request->description,
         ]);
 
+        //add image with spatie media
+        //??
+
         return response()->json([
             'status' => 'success',
             'message' => 'دسته بندی با موفقیت ساخته شد',

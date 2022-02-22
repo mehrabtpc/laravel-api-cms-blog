@@ -19,7 +19,6 @@ class StorePostRequest extends FormRequest
             'content' => 'required|min:10',
             'published_at' => 'required',
             'user_id' => 'required',
-
         ];
     }
 

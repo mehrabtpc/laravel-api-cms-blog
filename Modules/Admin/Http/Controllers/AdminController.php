@@ -60,6 +60,11 @@ class AdminController extends Controller
             'password' =>bcrypt($request->password),
         ]);
 
+        $role=$request->role;
+        if($role){
+            $admin->assignRole($role);
+        }
+
         return response()->json([
             'status' => 'success',
             'message' => 'حساب با موفقیت ویرایش شد',
